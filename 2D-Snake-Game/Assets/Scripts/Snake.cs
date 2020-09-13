@@ -7,6 +7,7 @@ public class Snake : MonoBehaviour {
     // Current Movement Direction
     // (by default it moves to the right)
     Vector2 dir = Vector2.right;
+    List<Transform> tail = new List<Transform>();
 
     // Use this for initialization
     void Start () {
@@ -29,7 +30,19 @@ void Update() {
 }
    
     void Move() {
-        // Move head into new direction
-        transform.Translate(dir);
+    // Save current position (gap will be here)
+    Vector2 v = transform.position;
+
+    // Move head into new direction (now there is a gap)
+    transform.Translate(dir);
+
+    // Do we have a Tail?
+    if (tail.Count > 0) {
+        // Move last Tail Element to where the Head was
+        tail.Last().position = v;
+
+        // Add to front of list, remove from the back
+        tail.Insert(0, tail.Last());
+        tail.RemoveAt(tail.Count-1);
     }
 }
